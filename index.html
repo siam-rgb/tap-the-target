@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tap the Target</title>
+    <style>
+        canvas {
+            display: block;
+            margin: auto;
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Tap the Target Game</h1>
+
+    <canvas id="gameCanvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const target = {
+            x: canvas.width / 2,
+            y: canvas.height / 2,
+            radius: 30,
+            color: "#0095DD"
+        };
+
+        canvas.addEventListener("touchstart", tapHandler);
+
+        function tapHandler(e) {
+            const touchX = e.touches[0].clientX;
+            const touchY = e.touches[0].clientY;
+
+            // Check if the tap is within the target
+            if (
+                touchX > target.x - target.radius &&
+                touchX < target.x + target.radius &&
+                touchY > target.y - target.radius &&
+                touchY < target.y + target.radius
+            ) {
+                alert("You tapped the target!");
+                resetTarget();
+            }
+        }
+
+        function drawTarget() {
+            ctx.beginPath();
+            ctx.arc(target.x, target.y, target.radius, 0, Math.PI * 2);
+            ctx.fillStyle = target.color;
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        function resetTarget() {
+            target.x = Math.random() * canvas.width;
+            target.y = Math.random() * canvas.height;
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            drawTarget();
+
+            requestAnimationFrame(draw);
+        }
+
+        // Start the game loop
+        draw();
+    </script>
+
+</body>
+</html>
